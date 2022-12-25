@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="keywords" content="AFIP, Impuestos, Impositiva, Aduana, Seguridad Social, Administracin Federal ">
+	<meta name="author" content="Administracin Federal">
+
+	<title>F960/D | AFIP - Administración Federal de Ingresos Publicos</title>
+
+	<link rel="shortcut icon" href="http://www.afip.gob.ar/home/images/adeafip.ico" type="image/x-icon">
+	<link href="./index_files/css" rel="stylesheet" type="text/css">
+
+
+	<!-- Reset -->
+	<link rel="stylesheet" href="./index_files/reset.css" type="text/css">
+
+	<!-- Esqueleto -->
+	<link rel="stylesheet" href="./index_files/esqueleto.css" type="text/css">
+
+	<!-- Estilos -->
+	<link rel="stylesheet" href="./index_files/estilosGenericos.css" type="text/css">
+
+
+	<!-- Container -->
+	<link rel="stylesheet" href="./index_files/container.css" type="text/css">
+
+	<!-- Jquery -->
+	<script type="text/javascript" src="./index_files/jquery-1.12.0.js.descarga"></script>
+
+	<script src="./index_files/toastr.min.js.descarga"></script>
+	<link href="./index_files/toastr.min.css" rel="stylesheet">
+
+    <!-- Busqueda por CUIT -->
+    
+	
+	<script type="text/javascript">
+		var msgErr = "";
+		var msgSucc = "";
+
+		function Validar() {
+			$('input[id$=hChecks]').val(
+				($("input[id$=chkNoDebito]").length > 0 ? ($("input[id$=chkNoDebito]").prop('checked') ? "S" : "N") : "N") +
+				($("input[id$=chkNoFactura]").prop('checked') ? "S" : "N") +
+                ($("input[id$=chkNoF960]").prop('checked') ? "S" : "N")
+
+            );
+
+			if ($('input[id$=hChecks]').val().indexOf('S') >= 0) {
+				if ($('input[id$=tbCUIT]').val().length == 11) {
+					if ($('input[id$=tbCUIT]').val() != $('#lblCUITFormat').text().replace('-', '').replace('-', '')) {
+						if ($('input[id$=tbMail]').val() != "" ) {
+							$('#btnEnvAlerta').hide();
+							$('#btnEnvAlertaDis').show();
+							//$('input[type=checkbox], input[type=text]').prop('disabled', 'disabled');
+							return true;
+						}
+						else {
+						    toastr["error"]("Debés ingresar, una dirección de mail.");
+							return false;
+						}
+					}
+					else {
+						toastr["error"]("El CUIL/CUIT/CDI del denunciante no puede ser igual que el CUIT del denunciado.");
+						return false;
+					}
+				}
+				else {
+					toastr["error"]("Debés ingresar un CUIL/CUIT/CDI válido.");
+					return false;
+				}
+			}
+			else {
+			    toastr["error"]("Debés seleccionar algún tipo de alerta.");
+				return false;
+			}
+		}
+
+		$(function () {
+			if (msgErr != "") {
+				if (msgErr.indexOf("Usted") >= 0)
+				    $('#chkNoDebito, #chkNoFactura, #chkNoF960').prop('checked', false);
+
+				toastr["error"](msgErr);
+			}
+
+			if (msgSucc != "") {
+				toastr["success"](msgSucc);
+				$('#chkNoDebito, #chkNoFactura, #chkNoF960').prop('checked', false);
+			}
+		});
+
+	</script>
+	<style>
+		.state-loading {
+			position: relative;
+			cursor: not-allowed;
+			filter: alpha(opacity=65);
+			-webkit-box-shadow: none;
+			box-shadow: none;
+			opacity: .65;
+			white-space: nowrap;
+			word-break: initial;
+			display: inline-block;
+			text-align: center;
+			-ms-touch-action: manipulation;
+			touch-action: manipulation;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			font-size: 14px !important;
+			vertical-align: middle;
+			letter-spacing: 0.9px;
+			line-height: 44px;
+			min-height: 44px;
+			overflow: hidden;
+			font-family: 'Open Sans',sans-serif;
+		    font-weight: 100 !important;
+			text-transform: uppercase;
+		    padding: 0 16px 0 16px !important;
+		}
+
+			.state-loading:before {
+				-webkit-animation: loader .6s linear;
+				-webkit-animation-iteration-count: infinite;
+				animation: loader .6s linear;
+				animation-iteration-count: infinite;
+				border-color: #767676 #F9F9F9 #F9F9F9;
+				border-radius: 600rem;
+				border-style: solid;
+				border-width: .2em;
+				box-shadow: 0 0 0 1px transparent;
+				content: '';
+				height: 2.2585em;
+				left: 50%;
+				margin: -1.12925em 0 0 -1.12925em;
+				position: absolute;
+				top: 50%;
+				width: 2.2585em;
+				z-index: 5;
+			}
+
+			.state-loading:after {
+				background-color: rgba(204, 204, 204, 0.7);
+				border-radius: 4px;
+				content: '';
+				height: 100%;
+				left: 0;
+				position: absolute;
+				top: 0;
+				width: 100%;
+				z-index: 4;
+			}
+
+		@keyframes loader {
+			from {
+				-webkit-transform: rotate(0);
+				transform: rotate(0);
+			}
+
+			to {
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+		}
+		input:disabled {
+			background-color: #e5e4e4 !important;
+		}
+	</style>
+
+</head>
+<body class="bg-gris-1">
+	<form name="Form1" method="post" action="https://serviciosweb.afip.gob.ar/clavefiscal/qr/publicInfoD.aspx" id="Form1">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTExMTk5OTIyMjgPFgQeBGN1aXQHAAD8d1F8E0IeB1RpcG9TZWMUKwECZmYWAmYPZBYCAgEPZBYIAgEPDxYCHgRUZXh0BSRTVUNFU0lPTiBERSBGRVJOQU5ERVogR1VTVEFWTyBBRE9MRk9kZAIDDw8WAh8CBQ0yMC05MjI1MjMxMy01ZGQCCQ9kFgQCAQ8PFgIfAgUrRUxBQk9SQUNJw5NOIERFIFBBU1RBUyBBTElNRU5UQVJJQVMgRlJFU0NBU2RkAgMPFgIeB1Zpc2libGVnFgICAQ8PFgIfAgVkU0VSVklDSU9TIElOTU9CSUxJQVJJT1MgUkVBTElaQURPUyBQT1IgQ1VFTlRBIFBST1BJQSwgQ09OIEJJRU5FUyBVUkJBTk9TIFBST1BJT1MgTyBBUlJFTkRBRE9TIE4uQy5QLmRkAgsPFgIfA2dkZKaso9H5aPBuU3BqUIn0JFiqVZgb">
+</div>
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="B4E12FD9">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWBQL277nsCQLU/rPQBQKSh7GlCQL+n/3MDwK0gouLDmX+9B13EYf1r20DO8TsZMMIJQ4h">
+</div>
+		<div id="header">
+			<div class="container">
+				<div class="units-row margin-0 hidden marginUpDown-5">
+					<div class="unit-100">
+						<div class="width-100">
+							<a id="AFIP" href="http://www.afip.gob.ar/sitio/externos/">
+								<img src="./index_files/afip.png" class="logoAFIP marginRight-15" alt="Logo AFIP"></a>
+							<h4 class="tituloSistema ">Formulario 960/D</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Titulo Página + Menu -->
+
+		<!-- TITULO IMAGEN  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+		<div id="menuContainer" class="bg-azul-7">
+			<div class="container">
+				<div id="cssmenu" style="height: 20px !important;">
+					<div id="menu-button"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- FIN TITULO IMAGEN  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+
+
+
+
+		<!-- CUERPO CENTRAL  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+		<div id="contenido">
+			<div class="container">
+				<!-- CONTENEDOR  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+				<div class="contenido">
+					<div class="units-row">
+						<div class="unit-100">
+
+							<!-- *** Titulo, descripcion y barra de navegacion *** -->
+							<div class="separadorBlanco"></div>
+							<div class="marginBottom-30">
+
+
+                                <!-- CONTENIDO //////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+                                <div id="divContenido" class="units-row">
+									<div class="unit-50">
+										<div class="menuRecuadro shadow-1 padding-40">
+											<h2 class="light font-size-38 bold ">
+												<span id="lblNombre"> VEBALDI S.A.S. </span></h2>
+											<div class="separadorBlancoSimple"></div>
+
+											<div class="paddingSide-25">
+
+												<div class="separadorBlancoSimple"></div>
+												<h6 class="margin-0 normal">CUIT</h6>
+												<h4 class=" grisOscuro bolder ">
+													<span id="lblCUITFormat">30-71582819-3</span></h4>
+												
+												
+											
+												
+
+											</div>
+
+										</div>
+										<div class="separadorBlancoSimple"></div>
+									</div>
+
+
+									<div class="unit-50">
+										<div class="padding-30 bg-blanco border-1">
+											<div class=" font-size-15 marginTop-20">
+												<h4 class="normal negro uppercase font-size-20 marginTop-20">Irregularidades</h4>
+
+												<p>Si detectás alguna de las siguientes condiciones:</p>
+												<div class="marginLeft-20">
+													<p id="pAceptDebito">
+														<input class="lista" id="chkNoDebito" type="checkbox" name="checkbox" value="1">
+														<label for="chkNoDebito">No me acepta la tarjeta de débito como medio de pago</label>
+													</p>
+													<p id="pNoFactura">
+														<input class="lista" id="chkNoFactura" type="checkbox" name="checkbox" value="2">
+														<label for="chkNoFactura">No me entregó factura</label>
+													</p>
+                                                    <p id="pNoF960">
+														<input class="lista" id="chkNoF960" type="checkbox" name="checkbox" value="3">
+														<label for="chkNoF960">No exhibe formulario 960</label>
+													</p>
+												</div>
+
+												<h4 class="bolder marginBottom-10">Por favor informanos sobre estas situaciones. </h4>
+												<p>Para ello, indicanos tu CUIL/CUIT/CDI y un dato de contacto, para hacer efectiva la alerta.</p>
+												<div class="separadorBlancoSimple"></div>
+												<h6>CUIL/CUIT/CDI</h6>
+												<input name="tbCUIT" type="text" maxlength="11" id="tbCUIT" class="usuario">
+
+												<h6>Email de contacto</h6>
+												<input name="tbMail" type="text" maxlength="200" id="tbMail" class="mail">
+
+												<div class="textRight">
+													<input type="submit" name="btnEnvAlerta" value="Enviar alerta" onclick="return Validar();" id="btnEnvAlerta" class="button azul large marginTop-20">
+													<button type="button" id="btnEnvAlertaDis" class="button azul large marginTop-20 disabled state-loading " style="display: none;">Enviar alerta</button>
+												</div>
+												<input type="hidden" name="hChecks" id="hChecks">
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
+</body></html>
